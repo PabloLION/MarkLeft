@@ -63,9 +63,16 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
 				case 'insertWikiLink':
 					this.insertWikiLink(document, e.position, e.text);
 					return;
+				case 'requestContent':
+					updateWebview();
+					return;
+				case 'openWikiLink':
+					this.openWikiLink(e.link);
+					return;
 			}
 		});
 
+		// Send initial content
 		updateWebview();
 	}
 
@@ -98,5 +105,33 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
 	public togglePreview() {
 		// Implementation for toggling preview mode
 		vscode.window.showInformationMessage('Preview mode toggled');
+	}
+
+	private async openWikiLink(linkText: string) {
+		const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+		if (!workspaceFolder) {
+			vscode.window.showErrorMessage('No workspace open');
+			return;
+		}
+
+		// Try to find the file
+		const pattern = new vscode.RelativePattern(workspaceFolder, `**/${linkText}.md`);
+		const files = await vscode.workspace.findFiles(pattern);
+		
+		if (files.length > 0) {
+			// Open the existing file
+			const document = await vscode.workspace.openTextDocument(files[0]);
+			await vscode.window.showTextDocument(document);
+		} else {
+			// Create a new file
+			const newFileUri = vscode.Uri.joinPath(workspaceFolder.uri, `${linkText}.md`);
+			const edit = new vscode.WorkspaceEdit();
+			edit.createFile(newFileUri, { ignoreIfExists: true });
+			edit.insert(newFileUri, new vscode.Position(0, 0), `# ${linkText}\n\n`);
+			
+			await vscode.workspace.applyEdit(edit);
+			const document = await vscode.workspace.openTextDocument(newFileUri);
+			await vscode.window.showTextDocument(document);
+		}
 	}
 }
