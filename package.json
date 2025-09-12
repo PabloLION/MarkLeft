@@ -1,0 +1,158 @@
+{
+  "name": "markright",
+  "displayName": "MarkRight",
+  "description": "Obsidian-like VSCode markdown editor with selective editing, live LaTeX, enhanced tables, diagrams, and smart features",
+  "version": "0.1.0",
+  "publisher": "markright",
+  "icon": "images/icon.svg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PabloLION/MarkRight"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other",
+    "Formatters",
+    "Visualization"
+  ],
+  "keywords": [
+    "markdown",
+    "obsidian",
+    "latex",
+    "wysiwyg",
+    "wiki-links",
+    "diagrams"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "markright.openEditor",
+        "title": "Open MarkRight Editor",
+        "category": "MarkRight"
+      },
+      {
+        "command": "markright.togglePreview",
+        "title": "Toggle Preview",
+        "category": "MarkRight"
+      },
+      {
+        "command": "markright.insertWikiLink",
+        "title": "Insert Wiki Link",
+        "category": "MarkRight"
+      },
+      {
+        "command": "markright.toggleFocusMode",
+        "title": "Toggle Focus Mode",
+        "category": "MarkRight"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "markright.openEditor",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m",
+        "when": "editorTextFocus && resourceExtname == .md"
+      },
+      {
+        "command": "markright.insertWikiLink",
+        "key": "ctrl+shift+l",
+        "mac": "cmd+shift+l",
+        "when": "editorTextFocus && resourceExtname == .md"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "markright.openEditor",
+          "when": "resourceExtname == .md",
+          "group": "markright"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "markright.openEditor",
+          "when": "resourceExtname == .md",
+          "group": "markright"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "MarkRight",
+      "properties": {
+        "markright.enableLivePreview": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable live preview mode"
+        },
+        "markright.enableLatex": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable LaTeX rendering"
+        },
+        "markright.enableWikiLinks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable wiki-style links [[link]]"
+        },
+        "markright.enableDiagrams": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable diagram rendering (Mermaid, PlantUML)"
+        },
+        "markright.customCss": {
+          "type": "string",
+          "default": "",
+          "description": "Custom CSS for the editor"
+        },
+        "markright.focusMode": {
+          "type": "string",
+          "enum": [
+            "off",
+            "paragraph",
+            "section"
+          ],
+          "default": "off",
+          "description": "Focus mode setting"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "webpack --mode production",
+    "watch": "webpack --mode development --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "test": "npm run compile && node ./out/test/runTest.js",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/katex": "^0.16.7",
+    "@types/marked": "^5.0.2",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^8.28.0",
+    "glob": "^11.0.3",
+    "mocha": "^11.7.2",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "dependencies": {
+    "highlight.js": "^11.7.0",
+    "katex": "^0.16.4",
+    "marked": "^4.2.5",
+    "mermaid": "^9.3.0"
+  }
+}

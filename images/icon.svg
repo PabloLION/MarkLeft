@@ -1,0 +1,20 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#007acc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1177bb;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="56" fill="url(#gradient)" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Markdown 'M' symbol -->
+  <path d="M32 40 L32 88 L40 88 L40 56 L48 72 L56 56 L56 88 L64 88 L64 40 L56 40 L48 56 L40 40 Z" fill="white"/>
+  
+  <!-- Right arrow/link symbol -->
+  <path d="M72 52 L88 52 L88 44 L100 56 L88 68 L88 60 L72 60 Z" fill="white"/>
+  
+  <!-- Wiki link brackets -->
+  <path d="M68 76 L72 76 L72 84 L76 84 M84 76 L88 76 L88 84 L92 84" stroke="white" stroke-width="2" fill="none"/>
+</svg>
