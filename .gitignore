@@ -140,3 +140,7 @@ vite.config.ts.timestamp-*
 
 .gemini/
 gha-creds-*.json
+
+# Extension specific
+*.vsix
+out/

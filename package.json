@@ -1,0 +1,219 @@
+{
+  "name": "markleft",
+  "displayName": "MarkLeft",
+  "description": "WYSIWYG Markdown Editor for VSCode",
+  "version": "0.1.0",
+  "publisher": "PabloLION",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other",
+    "Formatters",
+    "Snippets"
+  ],
+  "keywords": [
+    "markdown",
+    "wysiwyg",
+    "editor",
+    "preview",
+    "math",
+    "latex",
+    "mermaid",
+    "table"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onCommand:markleft.openEditor"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "markleft.openEditor",
+        "title": "Open with MarkLeft",
+        "category": "MarkLeft"
+      },
+      {
+        "command": "markleft.toggleMode",
+        "title": "Toggle Edit/Preview Mode",
+        "category": "MarkLeft",
+        "when": "markLeftEditorActive"
+      },
+      {
+        "command": "markleft.toggleTOC",
+        "title": "Toggle Table of Contents",
+        "category": "MarkLeft",
+        "when": "markLeftEditorActive"
+      },
+      {
+        "command": "markleft.toggleFrontmatter",
+        "title": "Toggle Frontmatter",
+        "category": "MarkLeft",
+        "when": "markLeftEditorActive",
+        "key": "ctrl+shift+m"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceLangId == markdown",
+          "command": "markleft.openEditor",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "when": "markLeftEditorActive",
+          "command": "markleft.toggleMode",
+          "group": "navigation"
+        },
+        {
+          "when": "markLeftEditorActive",
+          "command": "markleft.toggleTOC",
+          "group": "navigation"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "markleft.toggleFrontmatter",
+        "key": "ctrl+shift+m",
+        "when": "markLeftEditorActive"
+      },
+      {
+        "command": "markleft.toggleMode",
+        "key": "ctrl+shift+p",
+        "when": "markLeftEditorActive"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "MarkLeft Configuration",
+      "properties": {
+        "markleft.css.default": {
+          "type": "string",
+          "default": "",
+          "description": "Path to default CSS file for styling",
+          "scope": "application"
+        },
+        "markleft.css.workspace": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable workspace-specific CSS (.vscode/markdown-style.css)",
+          "scope": "resource"
+        },
+        "markleft.heading.scales": {
+          "type": "array",
+          "default": [2.5, 2.2, 2.0, 1.8, 1.6, 1.5],
+          "description": "Line height scales for H1-H6 headings",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 6,
+          "maxItems": 6,
+          "scope": "resource"
+        },
+        "markleft.syntax.opacity": {
+          "type": "number",
+          "default": 0.4,
+          "minimum": 0.1,
+          "maximum": 1.0,
+          "description": "Opacity level for markdown syntax elements",
+          "scope": "resource"
+        },
+        "markleft.toc.defaultLevel": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 6,
+          "description": "Default heading level depth for table of contents",
+          "scope": "resource"
+        },
+        "markleft.frontmatter.collapsed": {
+          "type": "boolean",
+          "default": true,
+          "description": "Start with frontmatter collapsed",
+          "scope": "resource"
+        },
+        "markleft.rendering.mode": {
+          "type": "string",
+          "enum": ["selective", "source", "preview"],
+          "default": "selective",
+          "description": "Default rendering mode",
+          "scope": "resource"
+        },
+        "markleft.math.renderer": {
+          "type": "string",
+          "enum": ["katex", "mathjax"],
+          "default": "katex",
+          "description": "Math formula renderer",
+          "scope": "resource"
+        },
+        "markleft.focus.typewriter": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable typewriter mode (keep current line centered)",
+          "scope": "resource"
+        },
+        "markleft.focus.dimInactive": {
+          "type": "boolean",
+          "default": false,
+          "description": "Dim inactive paragraphs in focus mode",
+          "scope": "resource"
+        }
+      }
+    },
+    "customEditors": [
+      {
+        "viewType": "markleft.editor",
+        "displayName": "MarkLeft Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.md"
+          },
+          {
+            "filenamePattern": "*.markdown"
+          }
+        ],
+        "priority": "option"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "eslint": "^8.39.0",
+    "typescript": "^5.0.4",
+    "@vscode/test-electron": "^2.3.0",
+    "vsce": "^2.15.0"
+  },
+  "dependencies": {
+    "katex": "^0.16.8",
+    "mermaid": "^10.6.0",
+    "markdown-it": "^13.0.2",
+    "markdown-it-katex": "^2.0.3",
+    "js-yaml": "^4.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PabloLION/MarkLeft.git"
+  },
+  "license": "GPL-3.0",
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  }
+}

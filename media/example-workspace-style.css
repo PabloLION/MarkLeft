@@ -1,0 +1,98 @@
+/* Example workspace-specific CSS for MarkLeft */
+/* Place this file at .vscode/markdown-style.css in your workspace */
+
+:root {
+    /* Override default heading scales */
+    --markleft-heading-scale-h1: 3.0;
+    --markleft-heading-scale-h2: 2.5;
+    
+    /* Custom syntax opacity */
+    --markleft-syntax-opacity: 0.3;
+    
+    /* Custom colors */
+    --markleft-accent-color: #007acc;
+    --markleft-warning-color: #ff6600;
+}
+
+/* Custom heading styles */
+.markleft-editor h1 {
+    color: var(--markleft-accent-color);
+    border-bottom: 2px solid var(--markleft-accent-color);
+    padding-bottom: 0.3em;
+}
+
+.markleft-editor h2 {
+    color: var(--markleft-accent-color);
+    border-bottom: 1px solid var(--markleft-accent-color);
+    padding-bottom: 0.2em;
+}
+
+/* Custom frontmatter styling */
+.markleft-frontmatter {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    border-left: 4px solid var(--markleft-accent-color);
+}
+
+/* Custom list styling */
+.markleft-list-item.level-1 .markleft-list-bullet::before {
+    content: "→";
+    color: var(--markleft-accent-color);
+    font-weight: bold;
+}
+
+/* Custom table styling */
+.markleft-table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+}
+
+/* Custom math styling */
+.markleft-math-block {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Custom TOC styling */
+.markleft-toc {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.markleft-toc h4 {
+    color: white;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 5px;
+}
+
+.markleft-toc-item {
+    color: rgba(255,255,255,0.9);
+}
+
+.markleft-toc-item:hover {
+    color: white;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 4px;
+}
+
+.markleft-toc-item.active {
+    color: white;
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .markleft-editor h1 {
+        font-size: 1.5em;
+    }
+    
+    .markleft-toc {
+        width: 180px;
+    }
+}
