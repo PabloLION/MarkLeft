@@ -67,6 +67,27 @@ Create a `.vscode/markdown-style.css` file in your workspace to customize the ap
 - `Ctrl+Shift+T`: Toggle table of contents
 - `Ctrl+Shift+P`: Toggle editing mode (selective/source/preview)
 
+## Current Status
+
+⚠️ **This is a foundation/scaffolding implementation** - Many features are not yet functional. This PR establishes the project structure and extension framework for incremental development.
+
+### What's Working
+- ✅ Basic VSCode extension structure
+- ✅ Custom editor provider registration
+- ✅ Configuration system
+- ✅ Basic webview rendering
+
+### What's Not Yet Implemented
+- ❌ Proper markdown parsing (uses basic regex)
+- ❌ Selective editing mode
+- ❌ TOC toggle functionality
+- ❌ Frontmatter toggle functionality
+- ❌ LaTeX rendering
+- ❌ Enhanced tables
+- ❌ Focus modes
+
+See [GITHUB_ISSUES_TEMPLATE.md](./GITHUB_ISSUES_TEMPLATE.md) for detailed implementation tasks.
+
 ## Development Status
 
 This project is in active development. See [PROJECT_BREAKDOWN.md](./PROJECT_BREAKDOWN.md) for detailed implementation phases and current status.
