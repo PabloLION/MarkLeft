@@ -10,6 +10,18 @@
   --border-color: #3e3e42;
   --hover-color: #094771;
   --focus-color: #1177bb;
+  
+  /* Focus mode styles */
+  --focus-paragraph-opacity: 0.05;
+  --focus-section-opacity: 0.03;
+  --focus-padding: 8px;
+  --focus-section-padding: 16px;
+  --focus-section-margin: -19px;
+  --focus-border-width: 3px;
+  
+  /* Error styles */
+  --error-color: #f14c4c;
+  --error-bg: rgba(241, 76, 76, 0.1);
 }
 
 * {
@@ -259,16 +271,38 @@ body {
 
 /* Focus Mode */
 .markdown-content[data-focus-mode="paragraph"] .focus-highlight {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, var(--focus-paragraph-opacity));
   border-radius: 4px;
-  padding: 8px;
+  padding: var(--focus-padding);
 }
 
 .markdown-content[data-focus-mode="section"] .focus-highlight {
-  background: rgba(255, 255, 255, 0.03);
-  border-left: 3px solid var(--accent-color);
-  padding-left: 16px;
-  margin-left: -19px;
+  background: rgba(255, 255, 255, var(--focus-section-opacity));
+  border-left: var(--focus-border-width) solid var(--accent-color);
+  padding-left: var(--focus-section-padding);
+  margin-left: var(--focus-section-margin);
+}
+
+/* Error States */
+.latex-error {
+  color: var(--error-color);
+  background: var(--error-bg);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.9em;
+  cursor: help;
+}
+
+.diagram-error {
+  color: var(--error-color);
+  background: var(--error-bg);
+  padding: var(--focus-padding);
+  border-radius: 4px;
+  border: 1px solid var(--error-color);
+  margin: var(--focus-padding) 0;
+  font-family: monospace;
+  text-align: center;
 }
 
 /* Lists */

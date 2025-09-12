@@ -58,18 +58,35 @@ export class MarkdownRenderer {
 			// Process inline LaTeX $...$
 			text = text.replace(/\$([^$]+)\$/g, (match, latex) => {
 				try {
-					return katex.renderToString(latex, { throwOnError: false });
+					// Sanitize LaTeX input to prevent potential security issues
+					const sanitizedLatex = this.sanitizeLatex(latex);
+					return katex.renderToString(sanitizedLatex, { 
+						throwOnError: false,
+						strict: 'warn',
+						maxSize: 50,
+						maxExpand: 100
+					});
 				} catch (e) {
-					return match;
+					console.warn('KaTeX rendering error for inline math:', e);
+					return `<span class="latex-error" title="LaTeX Error: ${e instanceof Error ? e.message : 'Unknown error'}">${match}</span>`;
 				}
 			});
 
 			// Process block LaTeX $$...$$
 			text = text.replace(/\$\$([^$]+)\$\$/g, (match, latex) => {
 				try {
-					return katex.renderToString(latex, { throwOnError: false, displayMode: true });
+					// Sanitize LaTeX input to prevent potential security issues
+					const sanitizedLatex = this.sanitizeLatex(latex);
+					return katex.renderToString(sanitizedLatex, { 
+						throwOnError: false, 
+						displayMode: true,
+						strict: 'warn',
+						maxSize: 50,
+						maxExpand: 100
+					});
 				} catch (e) {
-					return match;
+					console.warn('KaTeX rendering error for block math:', e);
+					return `<div class="latex-error" title="LaTeX Error: ${e instanceof Error ? e.message : 'Unknown error'}">${match}</div>`;
 				}
 			});
 
@@ -116,6 +133,29 @@ export class MarkdownRenderer {
 	private processFocusMode(markdown: string): string {
 		// This will be enhanced based on focus mode settings
 		return markdown;
+	}
+
+	private sanitizeLatex(latex: string): string {
+		// Basic LaTeX sanitization to prevent malicious expressions
+		// Remove potentially dangerous commands
+		const dangerousCommands = [
+			'\\input', '\\include', '\\write', '\\immediate',
+			'\\openout', '\\closeout', '\\catcode', '\\def',
+			'\\let', '\\expandafter', '\\csname', '\\endcsname'
+		];
+		
+		let sanitized = latex.trim();
+		dangerousCommands.forEach(cmd => {
+			const regex = new RegExp(cmd.replace('\\', '\\\\'), 'gi');
+			sanitized = sanitized.replace(regex, '');
+		});
+		
+		// Limit length to prevent DoS
+		if (sanitized.length > 1000) {
+			sanitized = sanitized.substring(0, 1000);
+		}
+		
+		return sanitized;
 	}
 
 	private escapeHtml(text: string): string {

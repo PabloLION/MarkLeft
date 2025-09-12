@@ -146,6 +146,9 @@
                     }
                 }
                 break;
+            case 'togglePreview':
+                togglePreview();
+                break;
         }
     }
 
@@ -198,9 +201,25 @@
         
         preview.innerHTML = `<div class="markdown-content" data-focus-mode="${focusMode}">${html}</div>`;
         
-        // Render Mermaid diagrams
+        // Render Mermaid diagrams with error handling
         if (typeof mermaid !== 'undefined') {
-            mermaid.run();
+            try {
+                mermaid.run().catch(error => {
+                    console.error('Mermaid rendering error:', error);
+                    // Find and replace failed diagrams with error messages
+                    const failedDiagrams = document.querySelectorAll('.mermaid[data-processed="true"]');
+                    failedDiagrams.forEach(diagram => {
+                        if (diagram.textContent.includes('syntax error') || diagram.innerHTML.includes('error')) {
+                            diagram.innerHTML = `<div class="diagram-error">
+                                <strong>Mermaid Diagram Error</strong><br>
+                                <small>${error.message || 'Invalid diagram syntax'}</small>
+                            </div>`;
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Mermaid initialization error:', error);
+            }
         }
     }
 

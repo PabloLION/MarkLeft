@@ -14,6 +14,8 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
 
 	private readonly renderer: MarkdownRenderer;
 	private readonly webviewContent: WebviewContent;
+	private updateTimeout: NodeJS.Timeout | undefined;
+	private activeWebviewPanels = new Set<vscode.WebviewPanel>();
 
 	constructor(
 		private readonly extensionUri: vscode.Uri
@@ -31,24 +33,40 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
 			enableScripts: true,
 		};
 		webviewPanel.webview.html = await this.webviewContent.getHtmlForWebview(webviewPanel.webview);
+		
+		// Track this webview panel
+		this.activeWebviewPanels.add(webviewPanel);
 
-		function updateWebview() {
+		const updateWebview = () => {
 			webviewPanel.webview.postMessage({
 				type: 'update',
 				text: document.getText(),
 			});
-		}
+		};
+
+		// Debounced update function to prevent excessive updates
+		const debouncedUpdate = () => {
+			if (this.updateTimeout) {
+				clearTimeout(this.updateTimeout);
+			}
+			this.updateTimeout = setTimeout(updateWebview, 300);
+		};
 
 		// Hook up event handlers so that we can synchronize the webview with the text document.
 		const changeDocumentSubscription = vscode.workspace.onDidChangeTextDocument(e => {
 			if (e.document.uri.toString() === document.uri.toString()) {
-				updateWebview();
+				debouncedUpdate();
 			}
 		});
 
 		// Make sure we get rid of the listener when our editor is closed.
 		webviewPanel.onDidDispose(() => {
 			changeDocumentSubscription.dispose();
+			if (this.updateTimeout) {
+				clearTimeout(this.updateTimeout);
+				this.updateTimeout = undefined;
+			}
+			this.activeWebviewPanels.delete(webviewPanel);
 		});
 
 		// Receive message from the webview.
@@ -95,7 +113,7 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
 		}
 	}
 
-	private insertWikiLink(document: vscode.TextDocument, position: any, linkText: string) {
+	private insertWikiLink(document: vscode.TextDocument, position: { line: number; character: number }, linkText: string) {
 		const edit = new vscode.WorkspaceEdit();
 		const pos = new vscode.Position(position.line, position.character);
 		edit.insert(document.uri, pos, `[[${linkText}]]`);
@@ -103,8 +121,18 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
 	}
 
 	public togglePreview() {
-		// Implementation for toggling preview mode
-		vscode.window.showInformationMessage('Preview mode toggled');
+		// Toggle preview mode for all active webview panels
+		this.activeWebviewPanels.forEach(panel => {
+			panel.webview.postMessage({
+				type: 'togglePreview'
+			});
+		});
+		
+		if (this.activeWebviewPanels.size > 0) {
+			vscode.window.showInformationMessage('Preview mode toggled');
+		} else {
+			vscode.window.showInformationMessage('No active MarkRight editors to toggle preview');
+		}
 	}
 
 	private async openWikiLink(linkText: string) {

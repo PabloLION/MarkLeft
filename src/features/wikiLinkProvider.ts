@@ -4,6 +4,8 @@ import * as fs from 'fs';
 
 export class WikiLinkProvider implements vscode.Disposable {
 	private disposables: vscode.Disposable[] = [];
+	private fileCache = new Map<string, { files: vscode.Uri[]; timestamp: number }>();
+	private readonly CACHE_DURATION = 30000; // 30 seconds
 
 	constructor() {
 		this.registerProviders();
@@ -42,7 +44,7 @@ export class WikiLinkProvider implements vscode.Disposable {
 		token: vscode.CancellationToken,
 		context: vscode.CompletionContext
 	): Promise<vscode.CompletionItem[]> {
-		const linePrefix = document.lineAt(position).text.substr(0, position.character);
+		const linePrefix = document.lineAt(position).text.substring(0, position.character);
 		
 		// Check if we're inside a wiki-link
 		if (!linePrefix.endsWith('[[') && !this.isInsideWikiLink(linePrefix)) {
@@ -130,8 +132,23 @@ export class WikiLinkProvider implements vscode.Disposable {
 	}
 
 	private async findMarkdownFiles(workspaceUri: vscode.Uri): Promise<vscode.Uri[]> {
+		const cacheKey = workspaceUri.toString();
+		const now = Date.now();
+		
+		// Check if we have cached results that are still valid
+		const cached = this.fileCache.get(cacheKey);
+		if (cached && (now - cached.timestamp) < this.CACHE_DURATION) {
+			return cached.files;
+		}
+		
+		// Cache miss or expired, perform fresh search
 		const pattern = new vscode.RelativePattern(workspaceUri, '**/*.md');
-		return await vscode.workspace.findFiles(pattern);
+		const files = await vscode.workspace.findFiles(pattern);
+		
+		// Update cache
+		this.fileCache.set(cacheKey, { files, timestamp: now });
+		
+		return files;
 	}
 
 	private async findFileByName(workspaceUri: vscode.Uri, fileName: string): Promise<vscode.Uri | undefined> {
