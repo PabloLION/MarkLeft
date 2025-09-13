@@ -1,37 +1,49 @@
 # Contributing to MarkLeft
 
-Thank you for considering contributing! This guide explains how to open issues, request features, and contribute code or documentation.
+Thank you for considering contributing to MarkLeft. This document explains how to open issues and pull requests, and how the Copilot Coding Agent is expected to work with the repository.
 
-## Quick Checklist
-- [ ] Read the `README.md` and existing docs
-- [ ] Search existing issues before opening a new one
-- [ ] Use the appropriate issue template (`Copilot Task` or `Bug Report`)
-- [ ] Label your issue (`copilot`, `bug`, `enhancement`, etc.)
-- [ ] For code changes, open a PR with a clear description and tests if applicable
+## Quick checklist (for contributors)
 
-## Filing Issues
-- Use the `Copilot Task` template for tasks you want the Copilot agent to implement.
-- Provide acceptance criteria and minimal reproduction steps for bugs.
+- [ ] Search existing issues before opening a new one.
+- [ ] Use an existing template: **Bug Report** or **Copilot Task**.
+- [ ] Keep changes small and focused.
+- [ ] Add tests when possible.
+- [ ] Run linters and formatters before committing.
+- [ ] Follow commit message conventions (e.g., `chore:`, `feat:`, `fix:`, `docs:`).
 
-## Working on Code
-- Create a branch named `feat/<short-description>` or `fix/<short-description>`.
-- Keep changes small and focused.
-- Add tests when possible.
-- Run `npm test` or the repository's test commands before submitting a PR.
+## How to open an issue
 
-## Copilot Agent Guidelines
-- Tag issues intended for the agent with the `copilot` label.
-- Make tasks small and well-scoped; include acceptance criteria.
-- Ask the agent to open a PR when changes are ready.
+- Choose the appropriate template under `.github/ISSUE_TEMPLATE/`.
+- For tasks you want Copilot to work on, use the **Copilot Task** template and add the `copilot` label.
 
-## Pull Requests
-- Use the provided pull request template.
-- Keep the PR title descriptive and reference related issues (e.g., "Fix: ... (#17)").
-- Respond to review comments promptly.
+## Working with the Copilot Coding Agent
 
-## Code Style and Testing
-- Follow existing code style in the repo.
-- Run linters and formatters if configured.
+- Label suitable issues with `copilot` and ensure they are small, well-scoped, and contain acceptance criteria.
+- Add a short "Steps for the agent" list to guide the agent's implementation.
+- The agent will normally:
+  1. Create a short plan (todo list) and mark it in-progress.
+  2. Implement changes on a branch and open a PR.
+  3. Run tests and push the branch for review.
+
+## Pull request process
+
+1. Create a branch named `feat/<short-description>` or `fix/<short-description>`.
+2. Make changes and ensure the repository builds locally.
+3. Push the branch and open a pull request targeting `main`.
+4. Reference any related issues (for example, `Closes #17`).
+5. Add a clear description and checklist in the PR description.
+
+## Coding standards
+
+- Keep code readable and well-documented.
+- Add unit tests for new features.
+- Run the project's linters and formatters.
+
+## Triaging and labels
+
+- Use `.github/labels.yml` to keep labels consistent.
+- Use `copilot` for issues the agent should handle.
 
 ## Contact
-For questions, open an issue and mention `@PabloLION`.
+
+If you need help, open an issue or contact the maintainers through the repository.
