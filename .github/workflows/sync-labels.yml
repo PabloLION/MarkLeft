@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - .github/labels.yml
+  pull_request:
+    paths:
+      - .github/labels.yml
   workflow_dispatch:
 
 jobs:
@@ -12,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Sync labels
-        uses: EndBug/label-sync@v2
+        uses: EndBug/label-sync@v2.3.3
         with:
           config-file: .github/labels.yml
           token: ${{ secrets.GITHUB_TOKEN }}

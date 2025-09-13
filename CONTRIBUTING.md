@@ -21,6 +21,7 @@ Thank you for considering contributing to MarkLeft. This document explains how t
 - Label suitable issues with `copilot` and ensure they are small, well-scoped, and contain acceptance criteria.
 - Add a short "Steps for the agent" list to guide the agent's implementation.
 - The agent will normally:
+The agent will normally:
   1. Create a short plan (todo list) and mark it in-progress.
   2. Implement changes on a branch and open a PR.
   3. Run tests and push the branch for review.
@@ -38,6 +39,26 @@ Thank you for considering contributing to MarkLeft. This document explains how t
 - Keep code readable and well-documented.
 - Add unit tests for new features.
 - Run the project's linters and formatters.
+
+## Commit message conventions
+
+Follow conventional commit format with a type prefix and descriptive message:
+
+- `feat:` - New features (e.g., `feat: add user authentication`)
+- `fix:` - Bug fixes (e.g., `fix: resolve memory leak in image processor`)
+- `docs:` - Documentation changes (e.g., `docs: update API reference`)
+- `chore:` - Maintenance tasks (e.g., `chore: update dependencies`)
+- `test:` - Test additions or changes (e.g., `test: add unit tests for auth module`)
+- `refactor:` - Code refactoring (e.g., `refactor: simplify database connection logic`)
+- `style:` - Code style changes (e.g., `style: format code with prettier`)
+
+Examples:
+```
+feat: implement dark mode toggle
+fix: correct calculation in price component
+docs: add contributing guidelines
+chore: configure GitHub Actions workflow
+```
 
 ## Triaging and labels
 
