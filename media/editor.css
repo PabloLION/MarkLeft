@@ -104,6 +104,15 @@ body {
   tab-size: 2;
 }
 
+#markdown-editor.overlay-active {
+  color: transparent;
+  caret-color: var(--text-primary);
+}
+
+#markdown-editor.overlay-active::selection {
+  background: rgba(0, 122, 204, 0.35);
+}
+
 #markdown-editor::placeholder {
   color: var(--text-secondary);
 }
